@@ -2,11 +2,10 @@ spring:
   application:
     name: user-service
 
-#MongoDB Atlas
   data:
     mongodb:
-      uri: mongodb+srv://grazielleanaia_db_user:8tcuRSNAofMUgI3s@users-data.nvfnkmx.mongodb.net/userdb
-      database: userdb
+      uri: mongodb://localhost:27017/userservice
+      database: userservice
 
 server:
   port: 8082

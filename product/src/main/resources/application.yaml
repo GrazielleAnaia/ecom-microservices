@@ -3,10 +3,9 @@ spring:
     name: product-service
   #PostgreSQL
   datasource:
-#    url: jdbc:postgresql://localhost:5432/product
-    url: jdbc:postgresql://ep-flat-thunder-ae2aoof5-pooler.c-2.us-east-2.aws.neon.tech/product?sslmode=require&channel_binding=require
-    username: neondb_owner
-    password: npg_Zs8OcvBkeY9U
+    url: jdbc:postgresql://localhost:5432/productservice
+    username: graziuser
+    password: grazipassword
   jpa:
     database: POSTGRESQL
     show-sql: true
