@@ -1,9 +1,8 @@
 spring:
   application:
     name: order-service
-  #PostgreSQL
   datasource:
-    url: jdbc:postgresql://localhost:5432/order
+    url: jdbc:postgresql://localhost:5432/orderservice
     username: graziuser
     password: grazipassword
   jpa:
@@ -12,6 +11,9 @@ spring:
     hibernate:
       ddl-auto: update
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        format_sql: true
 
 server:
   port: 8083
