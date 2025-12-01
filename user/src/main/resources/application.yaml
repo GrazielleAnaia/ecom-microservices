@@ -5,7 +5,7 @@ spring:
 #MongoDB Atlas
   data:
     mongodb:
-      uri: mongodb+srv://grazielleanaia_db_user:8tcuRSNAofMUgI3s@users-data.nvfnkmx.mongodb.net/?appName=users-data
+      uri: mongodb+srv://grazielleanaia_db_user:8tcuRSNAofMUgI3s@users-data.nvfnkmx.mongodb.net/userdb
       database: userdb
 
 server:
