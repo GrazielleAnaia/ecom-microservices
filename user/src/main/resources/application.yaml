@@ -2,17 +2,11 @@ spring:
   application:
     name: user-service
 
-  #PostgreSQL
-  datasource:
-    url: jdbc:postgresql://localhost:5432/userdb
-    username: graziuser
-    password: grazipassword
-  jpa:
-    database: POSTGRESQL
-    show-sql: true
-    hibernate:
-      ddl-auto: update
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
+#MongoDB Atlas
+  data:
+    mongodb:
+      uri: mongodb+srv://grazielleanaia_db_user:8tcuRSNAofMUgI3s@users-data.nvfnkmx.mongodb.net/?appName=users-data
+      database: userdb
 
 server:
   port: 8082
