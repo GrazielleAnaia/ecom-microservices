@@ -1,23 +1,24 @@
 spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
   datasource:
-    url: jdbc:postgresql://localhost:5432/orderservice
+    url: jdbc:postgresql://localhost:5432/order
     username: graziuser
     password: grazipassword
+
+
   jpa:
     database: POSTGRESQL
     show-sql: true
     hibernate:
       ddl-auto: update
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-    properties:
-      hibernate:
-        format_sql: true
 
-  rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
+
 
 management:
   endpoints:
@@ -29,4 +30,4 @@ server:
   port: 8083
 
 app:
-  message: "Hello"
+  message: "Hello Order"

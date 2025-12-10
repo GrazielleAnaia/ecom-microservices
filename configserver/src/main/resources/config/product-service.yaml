@@ -1,6 +1,13 @@
 spring:
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
   datasource:
-    url: jdbc:postgresql://localhost:5432/productservice
+    url: jdbc:postgresql://localhost:5432/product
     username: graziuser
     password: grazipassword
   jpa:
@@ -10,11 +17,6 @@ spring:
       ddl-auto: update
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
-  rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
 
 management:
   endpoints:
@@ -23,3 +25,6 @@ management:
         include: "*"
 server:
   port: 8081
+
+app:
+  message: "Hello Product"
