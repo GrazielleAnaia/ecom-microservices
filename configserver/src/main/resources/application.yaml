@@ -1,6 +1,11 @@
 spring:
   application:
     name: configserver
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
 
   profiles:
     active: native
@@ -9,11 +14,7 @@ spring:
       server:
         native:
           search-locations: file:///C:\Projects\microservices\ecom-microservices\configserver\src\main\resources\config
-  rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
+
 
 management:
   endpoints:
