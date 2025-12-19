@@ -10,6 +10,7 @@ import com.ecommerce.order.model.CartItem;
 import com.ecommerce.order.repository.CartItemRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
