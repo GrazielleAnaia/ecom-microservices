@@ -13,7 +13,7 @@ public class GatewayConfig {
     public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
         return builder.routes()
                 .route("product-service", r ->
-                        r.path("/api/products/**")
+                        r.path("/products/**")
 //                                .filters(f -> f
 //                                        .retry(retryConfig ->
 //                                                retryConfig.setRetries(10)
@@ -23,20 +23,20 @@ public class GatewayConfig {
 //                                        .circuitBreaker(config ->
 //                                                config.setName("ecomBreaker")
 //                                                        .setFallbackUri("forward:/fallback/products")))
-//                                .filters(f -> f.rewritePath("/products(?<segment>/?.*)",
-//                                        "/api/products${segment}"))
+                                .filters(f -> f.rewritePath("/products(?<segment>/?.*)",
+                                        "/api/products${segment}"))
                                 .uri("lb://PRODUCT-SERVICE"))
 
                 .route("user-service", r ->
-                        r.path("/api/users/**")
-//                                .filters(f -> f.rewritePath("/users(?<segment>/?.*)",
-//                                        "/api/users${segment}"))
+                        r.path("/users/**")
+                                .filters(f -> f.rewritePath("/users(?<segment>/?.*)",
+                                        "/api/users${segment}"))
                                 .uri("lb://USER-SERVICE"))
 
                 .route("order-service", r ->
-                        r.path("/api/orders/**", "/api/cart/**")
-//                                .filters(f -> f.rewritePath("/(?<segment>.*)",
-//                                        "/api/${segment}"))
+                        r.path("/orders/**", "/cart/**")
+                                .filters(f -> f.rewritePath("/(?<segment>.*)",
+                                        "/api/${segment}"))
                                 .uri("lb://ORDER-SERVICE"))
 
                 .route("eureka-server", r ->

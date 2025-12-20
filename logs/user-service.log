@@ -2034,3 +2034,10 @@ Caused by: org.apache.hc.client5.http.HttpHostConnectException: Connect to http:
 2025-12-20T10:37:48.636-05:00  INFO 7604 --- [user-service] [Thread-3] com.netflix.discovery.DiscoveryClient    : Unregistering ...
 2025-12-20T10:37:48.654-05:00  INFO 7604 --- [user-service] [Thread-3] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_USER-SERVICE/host.docker.internal:user-service:8085 - deregister  status: 200
 2025-12-20T10:37:48.654-05:00  INFO 7604 --- [user-service] [Thread-3] com.netflix.discovery.DiscoveryClient    : Completed shut down of DiscoveryClient
+2025-12-20T10:40:27.778-05:00  INFO 12560 --- [user-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-12-20T10:45:27.782-05:00  INFO 12560 --- [user-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-12-20T10:50:27.787-05:00  INFO 12560 --- [user-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-12-20T10:55:27.793-05:00  INFO 12560 --- [user-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-12-20T11:00:27.797-05:00  INFO 12560 --- [user-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-12-20T11:05:27.811-05:00  INFO 12560 --- [user-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-12-20T11:10:27.814-05:00  INFO 12560 --- [user-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
