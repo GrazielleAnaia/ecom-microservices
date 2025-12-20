@@ -1,8 +1,7 @@
 spring:
-  data:
-    mongodb:
-      uri: mongodb://localhost:27017/userservice
-      database: userservice
+  mongodb:
+    uri: mongodb://localhost:27017
+    database: userservice
 
   rabbitmq:
     host: localhost
@@ -14,7 +13,12 @@ management:
   endpoints:
     web:
       exposure:
-        include: "*"
+        include: *
+
+#  endpoint:
+#    shutdown:
+#      enabled: true
+
 
 server:
   port: 8082
