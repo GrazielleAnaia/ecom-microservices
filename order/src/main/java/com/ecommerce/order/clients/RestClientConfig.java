@@ -5,21 +5,29 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
 public class RestClientConfig {
 
-    @LoadBalanced
+//    @LoadBalanced
+//    @Bean
+//    public RestClient.Builder restClientBuilderLb() {
+//        return RestClient.builder();
+//    }
+
+
     @Bean
-    public RestClient.Builder restClientBuilderLb() {
-        return RestClient.builder();
+    @LoadBalanced
+    public WebClient.Builder webClientBuild() {
+        return WebClient.builder();
     }
 
     //Modification needed to avoid circular dependency
-    @Primary
-    @Bean
-    RestClient.Builder restClientBuilder() {
-        return RestClient.builder();
-    }
+//    @Primary
+//    @Bean
+//    RestClient.Builder restClientBuilder() {
+//        return RestClient.builder();
+//    }
 
 }
