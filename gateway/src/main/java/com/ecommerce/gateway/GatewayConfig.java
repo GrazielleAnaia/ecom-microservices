@@ -14,23 +14,20 @@ public class GatewayConfig {
         return builder.routes()
                 .route("product-service", r ->
                         r.path("/products/**")
-//                                .filters(f -> f
-//                                        .retry(retryConfig ->
-//                                                retryConfig.setRetries(10)
-//                                                        .setMethods(HttpMethod.GET))
-//                                        .requestRateLimiter(config -> config.setRateLimiter(redisRateLimiter())
-//                                                .setKeyResolver(hostNameKeyResolver()))
-//                                        .circuitBreaker(config ->
-//                                                config.setName("ecomBreaker")
-//                                                        .setFallbackUri("forward:/fallback/products")))
                                 .filters(f -> f.rewritePath("/products(?<segment>/?.*)",
-                                        "/api/products${segment}"))
+                                                "/api/products${segment}")
+                                        .circuitBreaker(config ->
+                                                config.setName("gatewayBreaker")
+                                                        .setFallbackUri("forward:/fallback/products")))
                                 .uri("lb://PRODUCT-SERVICE"))
 
                 .route("user-service", r ->
                         r.path("/users/**")
                                 .filters(f -> f.rewritePath("/users(?<segment>/?.*)",
-                                        "/api/users${segment}"))
+                                        "/api/users${segment}")
+                                        .circuitBreaker(config ->
+                                                config.setName("gatewayBreaker")
+                                                        .setFallbackUri("forward:/fallback/users")))
                                 .uri("lb://USER-SERVICE"))
 
                 .route("order-service", r ->
@@ -46,7 +43,7 @@ public class GatewayConfig {
 
                 .route("eureka-server-static", r ->
                         r.path("/eureka/**")
-//                                .filters(f-> f.rewritePath("/eureka/?<segment>.*", "/${segment.*}"))
+                                .filters(f-> f.rewritePath("/eureka/?<segment>.*", "/${segment.*}"))
                                 .uri("http://localhost:8761"))
                 .build();
     }
