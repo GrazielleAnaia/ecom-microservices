@@ -8,9 +8,10 @@ import com.ecommerce.order.dto.ProductResponse;
 import com.ecommerce.order.dto.UserResponse;
 import com.ecommerce.order.model.CartItem;
 import com.ecommerce.order.repository.CartItemRepository;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -19,6 +20,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 
 public class CartService {
 
@@ -29,6 +31,7 @@ public class CartService {
     private final UserServiceClient userServiceClient;
 
 
+    @CircuitBreaker(name = "productService", fallbackMethod = "addToCartFallBack")
     public boolean addToCart(String userId, CartItemRequest cartItemRequest) {
 
         //Validation in MS will take place with inter service communication
@@ -76,5 +79,11 @@ public class CartService {
 
     public void clearCart(String userId) {
         cartItemRepository.deleteByUserId(userId);
+    }
+
+    public boolean addToCartFallBack(String userId, CartItemRequest cartItemRequest, Exception exception) {
+        log.info("Fallback call: {}", userId);
+        exception.printStackTrace();
+        return false;
     }
 }
