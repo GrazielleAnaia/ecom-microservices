@@ -1,1 +1,1 @@
-2025-12-21T00:00:29.143-05:00  INFO 12560 --- [user-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-12-22T00:00:28.611-05:00  INFO 12560 --- [user-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration

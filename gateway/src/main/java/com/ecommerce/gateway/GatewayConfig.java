@@ -4,6 +4,7 @@ import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 
 @Configuration
 public class GatewayConfig {
@@ -18,13 +19,15 @@ public class GatewayConfig {
                                                 "/api/products${segment}")
                                         .circuitBreaker(config ->
                                                 config.setName("gatewayBreaker")
-                                                        .setFallbackUri("forward:/fallback/products")))
+                                                        .setFallbackUri("forward:/fallback/products"))
+                                        .retry(retryConfig -> retryConfig.setRetries(10)
+                                                .setMethods(HttpMethod.GET)))
                                 .uri("lb://PRODUCT-SERVICE"))
 
                 .route("user-service", r ->
                         r.path("/users/**")
                                 .filters(f -> f.rewritePath("/users(?<segment>/?.*)",
-                                        "/api/users${segment}")
+                                                "/api/users${segment}")
                                         .circuitBreaker(config ->
                                                 config.setName("gatewayBreaker")
                                                         .setFallbackUri("forward:/fallback/users")))
@@ -43,7 +46,7 @@ public class GatewayConfig {
 
                 .route("eureka-server-static", r ->
                         r.path("/eureka/**")
-                                .filters(f-> f.rewritePath("/eureka/?<segment>.*", "/${segment.*}"))
+                                .filters(f -> f.rewritePath("/eureka/?<segment>.*", "/${segment.*}"))
                                 .uri("http://localhost:8761"))
                 .build();
     }

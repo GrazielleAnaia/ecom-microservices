@@ -9,6 +9,7 @@ import com.ecommerce.order.dto.UserResponse;
 import com.ecommerce.order.model.CartItem;
 import com.ecommerce.order.repository.CartItemRepository;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +32,9 @@ public class CartService {
     private final UserServiceClient userServiceClient;
 
 
-    @CircuitBreaker(name = "productService", fallbackMethod = "addToCartFallBack")
+    //    @CircuitBreaker(name = "productService", fallbackMethod = "addToCartFallBack")
+    @Retry(name = "retryBreaker", fallbackMethod = "addToCartFallBack")
+
     public boolean addToCart(String userId, CartItemRequest cartItemRequest) {
 
         //Validation in MS will take place with inter service communication
