@@ -64,6 +64,13 @@
 			<version>5.0.0</version>
 		</dependency>
 
+<!--		Implementation of rate limiting at gateway level-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis-reactive</artifactId>
+		</dependency>
+
+
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
