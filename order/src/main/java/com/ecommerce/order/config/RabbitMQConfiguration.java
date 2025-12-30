@@ -5,13 +5,13 @@ import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.JacksonJsonMessageConverter;
+import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitMQConfiguration {
-
 
     @Value("${rabbitmq.queue.name}")
     private String queueName;
@@ -52,8 +52,13 @@ public class RabbitMQConfiguration {
     }
 
     //It tells RabbitMQ to convert Java objets into Json when sending messages
+//    @Bean
+//    public JacksonJsonMessageConverter messageConverter() {
+//        return new JacksonJsonMessageConverter();
+//    }
+
     @Bean
-    public JacksonJsonMessageConverter messageConverter() {
+    public MessageConverter messageConverter() {
         return new JacksonJsonMessageConverter();
     }
 
