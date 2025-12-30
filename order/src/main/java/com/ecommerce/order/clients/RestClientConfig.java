@@ -10,24 +10,24 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Configuration
 public class RestClientConfig {
 
-//    @LoadBalanced
-//    @Bean
-//    public RestClient.Builder restClientBuilderLb() {
-//        return RestClient.builder();
-//    }
-
-
-    @Bean
     @LoadBalanced
-    public WebClient.Builder webClientBuild() {
-        return WebClient.builder();
+    @Bean
+    public RestClient.Builder restClientBuilderLb() {
+        return RestClient.builder();
     }
 
-    //Modification needed to avoid circular dependency
-//    @Primary
+
 //    @Bean
-//    RestClient.Builder restClientBuilder() {
-//        return RestClient.builder();
+//    @LoadBalanced
+//    public WebClient.Builder webClientBuild() {
+//        return WebClient.builder();
 //    }
+
+    //Modification needed to avoid circular dependency
+    @Primary
+    @Bean
+    RestClient.Builder restClientBuilder() {
+        return RestClient.builder();
+    }
 
 }
