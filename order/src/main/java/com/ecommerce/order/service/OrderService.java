@@ -13,6 +13,7 @@ import com.ecommerce.order.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -27,16 +28,18 @@ public class OrderService {
     private final CartService cartService;
 
     private final OrderRepository orderRepository;
-    private final RabbitTemplate rabbitTemplate;
+//    private final RabbitTemplate rabbitTemplate;
 
-    @Value("${rabbitmq.exchange.name}")
-    private String exchangeName;
+    private final StreamBridge streamBridge;
 
-    @Value("${rabbitmq.queue.name}")
-    private String queueName;
-
-    @Value("${rabbitmq.routing.key}")
-    private String routingKey;
+//    @Value("${rabbitmq.exchange.name}")
+//    private String exchangeName;
+//
+//    @Value("${rabbitmq.queue.name}")
+//    private String queueName;
+//
+//    @Value("${rabbitmq.routing.key}")
+//    private String routingKey;
 
     public Optional<OrderResponse> createOrder(String userId) {
         //Validate for cart items
@@ -83,7 +86,8 @@ public class OrderService {
         OrderCreatedEvent event = new OrderCreatedEvent(savedOrder.getId(), savedOrder.getUserId(),
                 savedOrder.getStatus(), savedOrder.getTotalAmount(),
                 mapToOrderItemDTOs(savedOrder.getItems()), savedOrder.getCreateAt());
-        rabbitTemplate.convertAndSend(exchangeName, routingKey, event);
+//        rabbitTemplate.convertAndSend(exchangeName, routingKey, event);
+        streamBridge.send("createOrder-out-0", event);
 
         return Optional.of(mapToOrderResponse(savedOrder));
     }

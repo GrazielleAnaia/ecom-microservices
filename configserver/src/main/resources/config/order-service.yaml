@@ -87,3 +87,16 @@ rabbitmq:
     name: queue.order
   routing:
     key: tracking.order
+
+  cloud:
+    stream:
+      bindings:
+        createOrder-out-0:
+          destination: exchange.order
+          content-type: application/json
+
+      rabbit:
+        bindings:
+          createOrder-out-0:
+            producer:
+              routing-key-expression: '''tracking.order'''

@@ -1,1 +1,1 @@
-2025-12-23T00:04:35.355-05:00  INFO 13824 --- [user-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2025-12-31T08:45:13.455-05:00  INFO 42676 --- [user-service] [springCloudBus.anonymous.dSx3Xpg7TxGujBBbVQskig-13412] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]

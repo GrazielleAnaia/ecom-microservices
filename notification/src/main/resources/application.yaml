@@ -13,6 +13,18 @@ spring:
     virtual-host: ${RABBITMQ_VHOST:guest}
     connection-timeout: 30000
 
+  cloud:
+    function:
+      definition: orderCreated
+    stream:
+      function:
+        definition: orderCreated
+      bindings:
+        orderCreated-in-0:
+          destination: exchange.order
+          group: notification-group
+          content-type: application/json
+
 rabbitmq:
   exchange:
     name: exchange.order
