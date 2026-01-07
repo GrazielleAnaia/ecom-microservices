@@ -1,15 +1,18 @@
 package com.ecommerce.order.service;
 
 
+import com.ecommerce.order.dto.OrderCreatedEvent;
 import com.ecommerce.order.dto.OrderItemDTO;
 import com.ecommerce.order.dto.OrderResponse;
 import com.ecommerce.order.model.CartItem;
 import com.ecommerce.order.model.Order;
 import com.ecommerce.order.model.OrderItem;
 import com.ecommerce.order.model.OrderStatus;
-import com.ecommerce.order.repository.CartItemRepository;
 import com.ecommerce.order.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.stream.function.StreamBridge;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -20,10 +23,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class OrderService {
 
-    private final CartItemRepository cartItemRepository;
     private final CartService cartService;
 
     private final OrderRepository orderRepository;
+
+    private final StreamBridge streamBridge;
 
     public Optional<OrderResponse> createOrder(String userId) {
         //Validate for cart items
@@ -65,7 +69,23 @@ public class OrderService {
         //Clear the cart
         cartService.clearCart(userId);
 
+        OrderCreatedEvent event = new OrderCreatedEvent(savedOrder.getId(), savedOrder.getUserId(),
+                savedOrder.getStatus(), savedOrder.getTotalAmount(),
+                mapToOrderItemDTOs(savedOrder.getItems()), savedOrder.getCreateAt());
+        streamBridge.send("createOrder-out-0", event);
+
         return Optional.of(mapToOrderResponse(savedOrder));
+    }
+
+    private List<OrderItemDTO> mapToOrderItemDTOs(List<OrderItem> items) {
+        return items.stream()
+                .map(item -> new OrderItemDTO(
+                        item.getId(),
+                        item.getProductId(),
+                        item.getQuantity(),
+                        item.getPrice(),
+                        item.getPrice().multiply(new BigDecimal(item.getQuantity()))
+                )).toList();
     }
 
     private OrderResponse mapToOrderResponse(Order order) {

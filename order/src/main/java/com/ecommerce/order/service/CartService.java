@@ -1,49 +1,51 @@
 package com.ecommerce.order.service;
 
 
+import com.ecommerce.order.clients.ProductServiceClient;
+import com.ecommerce.order.clients.UserServiceClient;
 import com.ecommerce.order.dto.CartItemRequest;
+import com.ecommerce.order.dto.ProductResponse;
+import com.ecommerce.order.dto.UserResponse;
 import com.ecommerce.order.model.CartItem;
 import com.ecommerce.order.repository.CartItemRepository;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 
 public class CartService {
 
     private final CartItemRepository cartItemRepository;
-//    private final ProductRepository productRepository;
-//    private final UserRepository userRepository;
+
+    private final ProductServiceClient productServiceClient;
+
+    private final UserServiceClient userServiceClient;
+
+
+    //    @CircuitBreaker(name = "productService", fallbackMethod = "addToCartFallBack")
+    @Retry(name = "retryBreaker", fallbackMethod = "addToCartFallBack")
 
     public boolean addToCart(String userId, CartItemRequest cartItemRequest) {
 
         //Validation in MS will take place with inter service communication
-        //Look for product
-//        Optional<Product> productOpt = productRepository.findById(cartItemRequest.getProductId());
-//
-//        if (productOpt.isEmpty())
-//            return false;
-//
-//        Product product = productOpt.get();
-//
-//        if (product.getStockQuantity() < cartItemRequest.getQuantity())
-//            return false;
-//
-//        Optional<User> userOpt = userRepository.findById(Long.valueOf(userId));
-//        if (userOpt.isEmpty())
-//            return false;
-//
-//        //User, product and stock exist
-//        User user = userOpt.get();
-//
+        ProductResponse productResponse = productServiceClient.getProductDetails(cartItemRequest.getProductId());
+        if (productResponse == null || productResponse.getStockQuantity() < cartItemRequest.getQuantity())
+            return false;
+
+        UserResponse userResponse = userServiceClient.getUserDetails(userId);
+        if (userResponse == null)
+            return false;
+
         CartItem existingCartItem = cartItemRepository.findByUserIdAndProductId(userId, cartItemRequest.getProductId());
 
         if (existingCartItem != null) {
@@ -80,5 +82,11 @@ public class CartService {
 
     public void clearCart(String userId) {
         cartItemRepository.deleteByUserId(userId);
+    }
+
+    public boolean addToCartFallBack(String userId, CartItemRequest cartItemRequest, Exception exception) {
+        log.info("Fallback call: {}", userId);
+        exception.printStackTrace();
+        return false;
     }
 }

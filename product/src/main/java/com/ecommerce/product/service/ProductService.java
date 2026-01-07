@@ -1,12 +1,12 @@
 package com.ecommerce.product.service;
 
 
-
 import com.ecommerce.product.dto.ProductRequest;
 import com.ecommerce.product.dto.ProductResponse;
 import com.ecommerce.product.model.Product;
 import com.ecommerce.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -81,5 +81,10 @@ public class ProductService {
         return productRepository.searchProducts(keyword).stream()
                 .map(this::mapToProductResponse)
                 .toList();
+    }
+
+    public Optional<ProductResponse> getProductById(String id) {
+        return productRepository.findByIdAndActiveTrue(Long.valueOf(id))
+                .map(this::mapToProductResponse);
     }
 }

@@ -1,0 +1,81 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/order
+    username: graziuser
+    password: grazipassword
+  jpa:
+    database: POSTGRESQL
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+
+#    shutdown:
+#      enabled: true
+  health:
+    circuitbreakers:
+      enabled: true
+
+#Circuit Breaker
+resilience4j:
+  circuitbreaker:
+    instances:
+      productService:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        permittedNumberOfCallsInHalfOpenState: 3
+        waitDurationInOpenState: 10s
+        failureRateThreshold: 50
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        slidingWindowType: count_based
+
+  retry:
+    instances:
+      retryBreaker:
+        maxAttempts: 5
+        waitDuration: 500ms
+
+server:
+  port: 8083
+
+app:
+  message: "Hello Order"
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+
+logging:
+  level:
+    org.springframework.cloud.stream: DEBUG
+
+  file:
+    name: logs/${spring.application.name}.log
+  logback:
+    rollingpolicy:
+      max-file-size: 5MB
+      max-history: 5
+
+  cloud:
+    stream:
+      bindings:
+        createOrder-out-0:
+          destination: some-topic
+          content-type: application/json
+      kafka:
+        binder:
+          brokers: localhost:9092
+
