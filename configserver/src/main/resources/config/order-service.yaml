@@ -1,22 +1,8 @@
 spring:
-  rabbitmq:
-    #    host: localhost
-    #    port: 5672
-    #    username: guest
-    #    password: guest
-    host: ${RABBITMQ_HOST:localhost}
-    port: ${RABBITMQ_PORT:5672}
-    username: ${RABBITMQ_USERNAME:guest}
-    password: ${RABBITMQ_PASSWORD:guest}
-    virtual-host: ${RABBITMQ_VHOST:guest}
-    connection-timeout: 30000
-
   datasource:
     url: jdbc:postgresql://localhost:5432/order
     username: graziuser
     password: grazipassword
-
-
   jpa:
     database: POSTGRESQL
     show-sql: true
@@ -73,6 +59,9 @@ eureka:
     fetch-registry: true
 
 logging:
+  level:
+    org.springframework.cloud.stream: DEBUG
+
   file:
     name: logs/${spring.application.name}.log
   logback:
@@ -80,23 +69,13 @@ logging:
       max-file-size: 5MB
       max-history: 5
 
-rabbitmq:
-  exchange:
-    name: exchange.order
-  queue:
-    name: queue.order
-  routing:
-    key: tracking.order
-
   cloud:
     stream:
       bindings:
         createOrder-out-0:
-          destination: exchange.order
+          destination: some-topic
           content-type: application/json
+      kafka:
+        binder:
+          brokers: localhost:9092
 
-      rabbit:
-        bindings:
-          createOrder-out-0:
-            producer:
-              routing-key-expression: '''tracking.order'''

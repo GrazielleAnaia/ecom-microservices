@@ -8,12 +8,11 @@ import com.ecommerce.order.model.CartItem;
 import com.ecommerce.order.model.Order;
 import com.ecommerce.order.model.OrderItem;
 import com.ecommerce.order.model.OrderStatus;
-import com.ecommerce.order.repository.CartItemRepository;
 import com.ecommerce.order.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -24,22 +23,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class OrderService {
 
-    private final CartItemRepository cartItemRepository;
     private final CartService cartService;
 
     private final OrderRepository orderRepository;
-//    private final RabbitTemplate rabbitTemplate;
 
     private final StreamBridge streamBridge;
-
-//    @Value("${rabbitmq.exchange.name}")
-//    private String exchangeName;
-//
-//    @Value("${rabbitmq.queue.name}")
-//    private String queueName;
-//
-//    @Value("${rabbitmq.routing.key}")
-//    private String routingKey;
 
     public Optional<OrderResponse> createOrder(String userId) {
         //Validate for cart items
@@ -81,12 +69,9 @@ public class OrderService {
         //Clear the cart
         cartService.clearCart(userId);
 
-        //After clearing cart, it will be published an event to RabbitMQ
-        //DTO class OrderCreatedEvent is created to avoid hard coding to publish RabbitMQ event
         OrderCreatedEvent event = new OrderCreatedEvent(savedOrder.getId(), savedOrder.getUserId(),
                 savedOrder.getStatus(), savedOrder.getTotalAmount(),
                 mapToOrderItemDTOs(savedOrder.getItems()), savedOrder.getCreateAt());
-//        rabbitTemplate.convertAndSend(exchangeName, routingKey, event);
         streamBridge.send("createOrder-out-0", event);
 
         return Optional.of(mapToOrderResponse(savedOrder));
