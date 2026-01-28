@@ -15,7 +15,7 @@ import java.util.function.Consumer;
 public class OrderEventConsumer {
 
     @Bean
-    public Consumer<OrderCreatedEvent> orderCreated() {
+    public Consumer<OrderCreatedEvent> createOrder() {
         return event -> {
             log.info("Received order created event for orderID: {}", event.getId());
             log.info("Received order created event for userID: {}", event.getUserId());
