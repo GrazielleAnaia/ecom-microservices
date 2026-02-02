@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: notification
+
+  cloud:
+    function:
+#      definition: orderCreated
+      definition: createOrder
+    stream:
+      function:
+#        definition: orderCreated
+        definition: createOrder
+      bindings:
+        createOrder-in-0:
+          destination: notification-order-topic
+          group: notification-group
+          content-type: application/json
+      kafka:
+        binder:
+          brokers: kafka:9092
+
+server:
+  port: 8084
+
+logging:
+  level:
+    org.springframework.cloud.stream: DEBUG
+  file:
+    name: logs/${spring.application.name}.log

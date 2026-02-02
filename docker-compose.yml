@@ -1,6 +1,6 @@
 services:
   postgres:
-    container_name: postgres_container
+    container_name: postgres
     image: postgres:14
     environment:
       POSTGRES_USER: graziuser
@@ -30,7 +30,7 @@ services:
     restart: unless-stopped
 
   rabbitmq:
-    container_name: rabbitmq_container
+    container_name: rabbitmq
     image: rabbitmq:4-management
     environment:
         RABBITMQ_DEFAULT_USER: guest
@@ -67,6 +67,94 @@ services:
     restart: unless-stopped
     networks:
       - backend
+
+  mongo:
+    image: mongodb/mongodb-community-server
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    networks:
+      - backend
+
+  configserver:
+    build: ./configserver
+    image: config-server
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./configserver/src/main/resources/config:/config
+    environment:
+      - SPRING_CLOUD_CONFIG_SERVER_NATIVE_SEARCH_LOCATIONS=/config
+    networks:
+      - backend
+
+  eureka:
+    build: ./eureka
+    container_name: eureka
+    ports:
+      - "8761:8761"
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "http://localhost:8761/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  gateway-service:
+    build: ./gateway
+    container_name: gateway
+    ports:
+      - "8889:8889"
+    networks:
+      - backend
+    depends_on:
+      - mongo
+      - rabbitmq
+      - eureka
+      - postgres
+      - configserver
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    healthcheck:
+      test: [ "CMD", "wget", "--spider", "http://localhost:8761/actuator/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  user-service:
+    build: ./user
+    container_name: user-service
+    ports:
+      - "8082:8082"
+    networks:
+      - backend
+    depends_on:
+      - mongo
+      - rabbitmq
+      - eureka
+      - configserver
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - MONGO_URI=${MONGO_URI}
+
+  product-service:
+    build: ./product
+    container_name: product-service
+    ports:
+      - "8081:8081"
+    networks:
+      - backend
+    depends_on:
+      - rabbitmq
+      - eureka
+      - configserver
+      - postgres
+      - mongo
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
 
 networks:
   backend:

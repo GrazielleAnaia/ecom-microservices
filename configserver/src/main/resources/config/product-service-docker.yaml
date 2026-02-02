@@ -1,32 +1,36 @@
 spring:
-  mongodb:
-    uri: ${MONGO_URI}
-    database: userservice
-
   rabbitmq:
-    host: localhost
+    host: rabbitmq
     port: 5672
     username: guest
     password: guest
+
+  datasource:
+    url: jdbc:postgresql://postgres:5432/product
+    username: {DB_USER}
+    password: ${DB_PASSWORD}
+  jpa:
+    database: POSTGRESQL
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
 
 management:
   endpoints:
     web:
       exposure:
         include: "*"
-
-#  endpoint:
-#    shutdown:
-#      enabled: true
-
-
 server:
-  port: 8082
+  port: 8081
+
+app:
+  message: "Hello Product"
 
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://eureka:8761/eureka/
     register-with-eureka: true
     fetch-registry: true
 
