@@ -112,6 +112,7 @@ services:
       - "8889:8889"
     networks:
       - backend
+    restart: on-failure
     depends_on:
       - mongo
       - rabbitmq
@@ -142,6 +143,7 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - MONGO_URI=${MONGO_URI}
+    restart: on-failure
 
   product-service:
     build: ../../product
@@ -150,6 +152,7 @@ services:
       - "8081:8081"
     networks:
       - backend
+    restart: on-failure
     depends_on:
       - rabbitmq
       - eureka
@@ -169,6 +172,7 @@ services:
       - "8083:8083"
     networks:
       - backend
+    restart: on-failure
     depends_on:
       - rabbitmq
       - eureka
@@ -180,6 +184,19 @@ services:
       - SPRING_PROFILES_ACTIVE=docker
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
+
+  notification-service:
+    build: ../../notification
+    container_name: notification-service
+    networks:
+      - backend
+    restart: on-failure
+    depends_on:
+      - eureka
+      - configserver
+      - mongo
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
 
 networks:
   backend:
