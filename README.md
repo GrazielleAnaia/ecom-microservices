@@ -1,13 +1,10 @@
-Got it — here’s a **clear, well-structured `README.md`** tailored for a **Spring Boot 4.0.0 microservices architecture**, written like a proper system design explanation and still practical for someone who wants to run it locally.
-
-You can copy-paste this directly into `README.md`.
 
 ---
 
 ```md
-# Spring Boot 4.0.0 Microservices Architecture
+# ECommerce Application Spring Boot 4.0.0 Microservices
 
-This project demonstrates a **modern microservices architecture** built with **Spring Boot 4.0.0** and **Spring Cloud**, focusing on scalability, loose coupling, and event-driven communication.  
+This project demonstrates a **ecommerce microservices architecture** built with **Spring Boot 4.0.0** and **Spring Cloud**, focusing on scalability, loose coupling, and event-driven communication.  
 All services are **containerized using Docker** and orchestrated with **Docker Compose** for easy local setup.
 
 ---
@@ -34,7 +31,7 @@ The system is decomposed into independent microservices, each responsible for a 
 
 #### 4. Notification Service
 - Consumes events from Kafka
-- Sends notifications (email, SMS, logs, etc.) based on order events
+- Sends notifications based on order events
 - Fully asynchronous and event-driven
 
 ---
@@ -57,7 +54,7 @@ This approach ensures **data ownership per service** and **loose coupling**.
 
 ## Communication Patterns
 
-### Synchronous Communication (REST)
+### Synchronous Communication (HTTP Interface WebClient REST)
 
 Used when:
 - Immediate response is required
@@ -68,7 +65,6 @@ Examples:
 - Order Service → Product Service (product availability)
 
 **Why REST?**
-- Simple and widely understood
 - Ideal for request–response interactions
 - Easier error handling for critical flows
 
@@ -121,7 +117,10 @@ All services are orchestrated using **Docker Compose**, including:
 
 - Config Server
 - Eureka Server
-- Kafka & Kraft
+- RabbitMQ
+- PostgreSQL
+- MongoDB
+- Kafka & Zookeeper
 - All microservices
 
 This allows the entire system to be started with a single command.
@@ -132,7 +131,45 @@ This allows the entire system to be started with a single command.
 
 ```
 
+ecom-microservices/
+│
+├── .github/                      # GitHub workflows and CI/CD configs
+├── .idea/                        # IDE (IntelliJ) project files
+├── additional/                   # Supporting or experimental resources
+│
+├── configserver/                 # Spring Cloud Config Server
+│
+├── deploy/
+│   └── docker/
+│       ├── init-multi-db-sql/    # SQL scripts for DB initialization
+│       │
+│       ├── .env                  # Environment variables for Docker Compose
+│       │
+│       ├── build-images-buildpacks.sh
+│       │                         # Builds Docker images using Cloud Native Buildpacks
+│       │
+│       ├── build-projects.sh     # Builds all microservice projects
+│       │
+│       ├── docker-compose.yml    # Local orchestration of services & infrastructure
+│       │
+│       └── init-multi-db.sql     # Creates and initializes multiple databases
+│
+├── eureka/                       # Service discovery (Netflix Eureka Server)
+│
+├── gateway/                      # API Gateway (Spring Cloud Gateway)
+│
+├── logs/                         # Centralized or local service logs
+│
+├── notification/                # Notification microservice
+├── order/                       # Order management microservice
+├── product/                     # Product catalog microservice
+├── user/                        # User & authentication microservice
+│
+└── README.md
+
+
 - [configserver](./configserver) – Centralized configuration
+- [deploy][docker](./configserver) – Centralized configuration
 - [gateway](./gateway) – Route incoming requests to the correct microservice
 - [eureka](./eureka) – Service discovery
 - [user](./) – User management
