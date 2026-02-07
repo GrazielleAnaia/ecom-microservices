@@ -129,10 +129,10 @@ This allows the entire system to be started with a single command.
 
 ```
 - [configserver](./configserver) – Centralized configuration
-- [deploy](./docker) – SQL scripts for DB initialization, env variables for Docker Compose, build all microservice projects
+- [deploy](./deploy/docker) – SQL scripts for DB initialization, env variables for Docker Compose, build all microservice projects
 - [gateway](./gateway) – Route incoming requests to the correct microservice
 - [eureka](./eureka) – Service discovery
-- [user](./) – User management
+- [user](./user) – User management
 - [product](./product) – Product catalog
 - [order](./order) – Order handling
 - [notification](./notification) – Notifications
