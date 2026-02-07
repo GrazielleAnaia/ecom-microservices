@@ -1,8 +1,6 @@
 
----
 
-```md
-# ECommerce Application Spring Boot 4.0.0 Microservices
+# *ECommerce Application Spring Boot 4.0.0 Microservices*
 
 This project demonstrates a **ecommerce microservices architecture** built with **Spring Boot 4.0.0** and **Spring Cloud**, focusing on scalability, loose coupling, and event-driven communication.  
 All services are **containerized using Docker** and orchestrated with **Docker Compose** for easy local setup.
@@ -88,7 +86,7 @@ Examples:
 
 ## Service Discovery with Eureka
 
-**Spring Cloud Netflix Eureka** is used for service discovery.
+**Spring Cloud Eureka** is used for service discovery.
 
 - Each microservice registers itself with the **Eureka Server**
 - Services discover each other dynamically
@@ -130,46 +128,8 @@ This allows the entire system to be started with a single command.
 ## Project Structure
 
 ```
-
-ecom-microservices/
-│
-├── .github/                      # GitHub workflows and CI/CD configs
-├── .idea/                        # IDE (IntelliJ) project files
-├── additional/                   # Supporting or experimental resources
-│
-├── configserver/                 # Spring Cloud Config Server
-│
-├── deploy/
-│   └── docker/
-│       ├── init-multi-db-sql/    # SQL scripts for DB initialization
-│       │
-│       ├── .env                  # Environment variables for Docker Compose
-│       │
-│       ├── build-images-buildpacks.sh
-│       │                         # Builds Docker images using Cloud Native Buildpacks
-│       │
-│       ├── build-projects.sh     # Builds all microservice projects
-│       │
-│       ├── docker-compose.yml    # Local orchestration of services & infrastructure
-│       │
-│       └── init-multi-db.sql     # Creates and initializes multiple databases
-│
-├── eureka/                       # Service discovery (Netflix Eureka Server)
-│
-├── gateway/                      # API Gateway (Spring Cloud Gateway)
-│
-├── logs/                         # Centralized or local service logs
-│
-├── notification/                # Notification microservice
-├── order/                       # Order management microservice
-├── product/                     # Product catalog microservice
-├── user/                        # User & authentication microservice
-│
-└── README.md
-
-
 - [configserver](./configserver) – Centralized configuration
-- [deploy][docker](./configserver) – Centralized configuration
+- [deploy](./docker) – SQL scripts for DB initialization, env variables for Docker Compose, build all microservice projects
 - [gateway](./gateway) – Route incoming requests to the correct microservice
 - [eureka](./eureka) – Service discovery
 - [user](./) – User management
@@ -244,6 +204,6 @@ All services will automatically:
 * Monitoring with Prometheus & Grafana
 * Kubernetes deployment
 
-```
+
 
 
