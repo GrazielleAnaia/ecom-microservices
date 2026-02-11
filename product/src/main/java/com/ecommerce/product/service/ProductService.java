@@ -83,7 +83,7 @@ public class ProductService {
                 .map(product -> {
                     product.setActive(false);
 //                    productRepository.save(product);
-                    log.info("Product with id: {} was deleted", id);
+                    log.info("Product with id: {} was softly deleted", id);
                     return true;
                 })
                 .orElse(false);
