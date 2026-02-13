@@ -15,10 +15,6 @@ management:
       exposure:
         include: "*"
 
-#  endpoint:
-#    shutdown:
-#      enabled: true
-
 
 server:
   port: 8082
