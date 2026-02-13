@@ -19,8 +19,6 @@ management:
     health:
       show-details: always
 
-#    shutdown:
-#      enabled: true
   health:
     circuitbreakers:
       enabled: true
@@ -28,6 +26,9 @@ management:
 #Circuit Breaker
 resilience4j:
   circuitbreaker:
+    config:
+      default:
+        registerHealthIndicator: true
     instances:
       productService:
         registerHealthIndicator: true
